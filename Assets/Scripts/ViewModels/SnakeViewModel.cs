@@ -52,33 +52,39 @@ namespace ViewModels
                         pieces[i].position = lastPosition;
                         lastPosition = temp;
                     }
-
-                    var zeroScreenPoint = _main.ScreenToWorldPoint(Vector2.zero);
-                    var maxScreenPoint = _main.ScreenToWorldPoint(new Vector2(_main.pixelWidth, _main.pixelHeight));
-                    if (pieces[0].position.x < zeroScreenPoint.x)
-                    {
-                        pieces[0].position = new Vector2(maxScreenPoint.x, pieces[0].position.y);
-                    }
-                    else if (pieces[0].position.x > maxScreenPoint.x)
-                    {
-                        pieces[0].position = new Vector2(zeroScreenPoint.x, pieces[0].position.y);
-                    }
-
-                    if (pieces[0].position.y < zeroScreenPoint.y)
-                    {
-                        pieces[0].position = new Vector2(pieces[0].position.x, maxScreenPoint.y);
-                    }
-                    else if (pieces[0].position.y > maxScreenPoint.y)
-                    {
-                        pieces[0].position = new Vector2(pieces[0].position.x, zeroScreenPoint.y);
-                    }
                 }
+                CheckOnLeaveFrame();
                 CheckOnCrash();
                 yield return new WaitForSeconds(Time.deltaTime);
             }
             yield break;
         }
 
+
+        public void CheckOnLeaveFrame()
+        {
+            var zeroScreenPoint = _main.ScreenToWorldPoint(Vector2.zero);
+            var maxScreenPoint = _main.ScreenToWorldPoint(new Vector2(_main.pixelWidth, _main.pixelHeight));
+            var pieces = _model.Pieces;
+            if (pieces[0].position.x < zeroScreenPoint.x)
+            {
+                pieces[0].position = new Vector2(maxScreenPoint.x, pieces[0].position.y);
+            }
+            else if (pieces[0].position.x > maxScreenPoint.x)
+            {
+                pieces[0].position = new Vector2(zeroScreenPoint.x, pieces[0].position.y);
+            }
+
+            if (pieces[0].position.y < zeroScreenPoint.y)
+            {
+                pieces[0].position = new Vector2(pieces[0].position.x, maxScreenPoint.y);
+            }
+            else if (pieces[0].position.y > maxScreenPoint.y)
+            {
+                pieces[0].position = new Vector2(pieces[0].position.x, zeroScreenPoint.y);
+            }
+        }
+        
         public void CheckOnCrash()
         {
             var head = _model.Pieces[0];
