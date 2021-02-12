@@ -16,6 +16,7 @@ namespace ViewModels
         private Dictionary<Rotate, Vector3> _rotates;
         private Camera _main;
         private Vector3 _currentMove;
+        private bool _isGame = true;
 
 
         public SnakeViewModel(IModel model, IView view, GameObject gameObject)
@@ -72,14 +73,29 @@ namespace ViewModels
                         pieces[0].position = new Vector2(pieces[0].position.x, zeroScreenPoint.y);
                     }
                 }
+                CheckOnCrash();
                 yield return new WaitForSeconds(Time.deltaTime);
             }
             yield break;
         }
+
+        public void CheckOnCrash()
+        {
+            var head = _model.Pieces[0];
+            for (int i = 1; i < _model.Pieces.Length; i++)
+            {
+                if (_model.Pieces[i].position == head.position)
+                {
+                    _currentMove = Vector3.zero;
+                    _isGame = false;
+                    _view.OnDestroySnake();
+                }
+            }
+        }
         
         public void Move(Rotate rotate)
         {
-            if(_currentMove != -_rotates[rotate])
+            if(_currentMove != -_rotates[rotate] && _isGame)
                 _currentMove = _rotates[rotate];
         }
 

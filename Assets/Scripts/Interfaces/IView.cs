@@ -9,5 +9,6 @@ namespace Interfaces
         event Action<GameObject> TriggerAction;
         void Initialize(IViewModel model);
         void OnPickupScore();
+        void OnDestroySnake();
     }
 }
